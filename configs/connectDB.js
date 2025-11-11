@@ -3,8 +3,8 @@ const envVariables = require('./envVariables');
 
 async function connectDB(params) {
     try {
-        await mongoose.connect(envVariables.mongodbURI,{
-            dbName:"backend_project",
+        await mongoose.connect(envVariables.mongodbURI, {
+            dbName: "backend_project",
         });
         console.log("Connected to MongoDB");
     } catch (error) {

@@ -3,8 +3,11 @@ const app = express();
 const env = require('./configs/envVariables.js');
 const connectDB = require('./configs/connectDB.js');
 const UserRouter = require('./routes/users.route.js');
+const cookieParser = require('cookie-parser');
 
 connectDB() // calling connectDB function
+
+app.use(cookieParser());
 
 // these middleware used for parse the form data from body
 app.use(express.json());

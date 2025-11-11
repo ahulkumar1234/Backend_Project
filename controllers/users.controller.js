@@ -1,5 +1,7 @@
+const express = require('express');
 const user = require('../models/users.model');
 const bcrypt = require('bcryptjs');
+const generateToken = require('../utils/generateToken')
 
 const getAllUser = async (req, res) => {
     try {
@@ -56,6 +58,16 @@ const createNewUser = async (req, res) => {
             password: hashedPassword,
         })
 
+        //generateToken code
+        const accessToken = generateToken(newUser._id);
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true, // this doesnot allow JS to acces cookies
+            maxAge: 1000 * 60 * 60 * 24, // in miliseconds
+            secure: false, //true if using HTTPS
+        });
+
+
         return res.status(201).json({
             success: true,
             message: "User Created succesfully",
@@ -97,6 +109,16 @@ const loginUser = async (req, res) => {
                 message: "wrong password",
             });
         }
+
+        //generateToken code
+        const accessToken = generateToken(findExistingUser._id);
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true, // this doesnot allow JS to acces cookies
+            maxAge: 1000 * 60 * 60 * 24, // in miliseconds
+            secure: false, //true if using HTTPS
+        });
+
         return res.status(200).json({
             success: true,
             message: "Login Succesfully",
@@ -115,8 +137,47 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
 
+    const { id } = req.USER;
+
+    const findUser = await user.findById(id);
+
+    if (!findUser) {
+        res.status(404).json({
+            success: false,
+            message: "user not found"
+        })
+    }
+
 }
 const deleteUser = async (req, res) => {
+
+    try {
+        const { id } = req.USER;
+
+        const findUser = await user.findById(id);
+
+        if (!findUser) {
+            res.status(404).json({
+                success: false,
+                message: "user not found",
+            })
+        }
+
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24,
+            secure: false,
+        });
+
+        await user.deleteOne({ _id: id });
+        res.status(200).json({
+            success: true,
+            message: "user deleted succesfully",
+        })
+    } catch (error) {
+
+        console.log(error.message)
+    }
 
 }
 
