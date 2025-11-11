@@ -1,27 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const {getAllUser,createNewUser,loginUser,updateUser,deleteUser} = require("../controllers/users.controller")
+// const createNewUser = require("../controllers/users.controller")
+// const loginUser = require("../controllers/users.controller")
+// const updateUser = require("../controllers/users.controller")
+// const deleteUser = require("../controllers/users.controller")
 
 // http://localhost:3000/api/v1/users/
 
-router.get('/', (req, res) => {
-    res.send(`All users found`);
-});
 
-router.get('/:id', (req, res) => {
-    res.send(`one users found ${req.params.id}`);
-})
+router.get('/', getAllUser)
 
-router.post('/', (req, res) => {
-   
-});
+router.post('/', createNewUser);
 
-router.patch('/:id', (req, res) => {
+router.post('/login', loginUser)
 
-});
+router.patch('/:id', updateUser);
 
-router.delete('/:id', (req, res) => {
-
-});
+router.delete('/:id', deleteUser);
 
 module.exports = router;
 

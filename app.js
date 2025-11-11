@@ -2,9 +2,14 @@ const express = require('express');
 const app = express();
 const env = require('./configs/envVariables.js');
 const connectDB = require('./configs/connectDB.js');
+const UserRouter = require('./routes/users.route.js');
 
 connectDB() // calling connectDB function
 
+// these middleware used for parse the form data from body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+/////////////////////////////////////////////////
 
 // check route to see if the server is running
 app.get("/", (req, res) => {
@@ -12,7 +17,6 @@ app.get("/", (req, res) => {
 })
 
 
-const UserRouter = require('./routes/users.route.js');
 app.use("/api/v1/users", UserRouter);
 
 app.listen(env.PORT, () => {
