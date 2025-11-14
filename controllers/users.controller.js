@@ -188,3 +188,4 @@ module.exports = { getAllUser, createNewUser, loginUser, updateUser, deleteUser 
 // module.exports = {getAllUser,createNewUser};
 
 
+
